@@ -18,7 +18,7 @@ def load_data():
 
 def save_data(data):
     with open(DATA_FILE, 'w') as file:
-        json.dump(data, file)
+        json.dump(data, file, indent=4)
 
 
 def calculate_mpg(last_entry, new_entry):
@@ -36,8 +36,11 @@ def index():
 @app.route('/add', methods=['POST'])
 def add_entry():
     data = load_data()
+    date = request.form.get('date')
+    if not date:
+        date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     new_entry = {
-        'date': request.form.get('date', datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
+        'date': date,
         'odometer': float(request.form['odometer']),
         'fuel_price': float(request.form['fuel_price']),
         'fuel': float(request.form['fuel'])
