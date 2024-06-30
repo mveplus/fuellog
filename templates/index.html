@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Fuel Tracker</h1>
+        <form id="fuelForm">
+            <label for="odometer">Odometer Reading:</label>
+            <input type="number" id="odometer" name="odometer" required>
+            
+            <label for="fuel_price">Fuel Price:</label>
+            <input type="number" step="0.01" id="fuel_price" name="fuel_price" required>
+            
+            <label for="fuel">Fuel (Liters):</label>
+            <input type="number" step="0.01" id="fuel" name="fuel" required>
+            
+            <button type="submit">Add Entry</button>
+        </form>
+        
+        <button id="exportBtn">Export Data</button>
+
+        <div id="entries"></div>
+    </div>
+
+    <script>
+        document.getElementById('fuelForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/add', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const entryDiv = document.createElement('div');
+                entryDiv.textContent = `Date: ${data.date}, Odometer: ${data.odometer}, Fuel Price: ${data.fuel_price}, Fuel: ${data.fuel}, MPG: ${data.mpg}`;
+                document.getElementById('entries').appendChild(entryDiv);
+                this.reset();
+            });
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            window.location.href = '/export';
+        });
+    </script>
+</body>
+</html>
