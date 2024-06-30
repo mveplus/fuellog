@@ -28,6 +28,23 @@ def calculate_mpg(last_entry, new_entry):
     return mpg
 
 
+def calculate_total_fuel(data):
+    return sum(entry['fuel'] for entry in data)
+
+
+def calculate_predicted_mpg(data):
+    if not data:
+        return 0
+    total_distance = 0
+    total_gallons = 0
+    for i in range(1, len(data)):
+        distance = data[i]['odometer'] - data[i-1]['odometer']
+        gallons = data[i]['fuel'] * 0.264172  # convert liters to gallons
+        total_distance += distance
+        total_gallons += gallons
+    return total_distance / total_gallons if total_gallons != 0 else 0
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -39,11 +56,13 @@ def add_entry():
     date = request.form.get('date')
     if not date:
         date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
     new_entry = {
         'date': date,
         'odometer': float(request.form['odometer']),
         'fuel_price': float(request.form['fuel_price']),
-        'fuel': float(request.form['fuel'])
+        'fuel': float(request.form['fuel']),
+        'total_fuel_price': float(request.form['fuel_price']) * float(request.form['fuel'])
     }
 
     if data:
@@ -53,6 +72,10 @@ def add_entry():
         new_entry['mpg'] = 0
 
     data.append(new_entry)
+    total_fuel = calculate_total_fuel(data)
+    predicted_mpg = calculate_predicted_mpg(data)
+    new_entry['total_fuel'] = total_fuel
+    new_entry['predicted_mpg'] = predicted_mpg
     save_data(data)
     return jsonify(new_entry)
 
@@ -61,7 +84,7 @@ def add_entry():
 def export_data():
     data = load_data()
     with open('data.csv', 'w', newline='') as csvfile:
-        fieldnames = ['date', 'odometer', 'fuel_price', 'fuel', 'mpg']
+        fieldnames = ['date', 'odometer', 'fuel_price', 'fuel', 'total_fuel_price', 'mpg', 'total_fuel', 'predicted_mpg']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()

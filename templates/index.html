@@ -41,7 +41,7 @@
             .then(response => response.json())
             .then(data => {
                 const entryDiv = document.createElement('div');
-                entryDiv.textContent = `Date: ${data.date}, Odometer: ${data.odometer}, Fuel Price: ${data.fuel_price}, Fuel: ${data.fuel}, MPG: ${data.mpg}`;
+                entryDiv.textContent = `Date: ${data.date}, Odometer: ${data.odometer}, Fuel Price: ${data.fuel_price}, Fuel: ${data.fuel}, Total Fuel Price: ${data.total_fuel_price}, MPG: ${data.mpg}, Total Fuel: ${data.total_fuel}, Predicted MPG: ${data.predicted_mpg}`;
                 document.getElementById('entries').appendChild(entryDiv);
                 this.reset();
             });

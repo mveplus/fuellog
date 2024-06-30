@@ -19,5 +19,15 @@
         "fuel_price": 1.23,
         "fuel": 40.0,
         "mpg": 28.390594006934872
+    },
+    {
+        "date": "2024-06-30 20:14:45",
+        "odometer": 1000.0,
+        "fuel_price": 1.23,
+        "fuel": 40.0,
+        "total_fuel_price": 49.2,
+        "mpg": 0.0,
+        "total_fuel": 135.11,
+        "predicted_mpg": 20.595280382252355
     }
 ]
