@@ -59,7 +59,7 @@ def add_entry():
         date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     else:
         date = datetime.strptime(date, '%Y-%m-%dT%H:%M').strftime('%Y-%m-%d %H:%M:%S')
-    
+
     fuel_price = request.form['fuel_price']
     if '.' in fuel_price:
         fuel_price = float(fuel_price)
@@ -92,20 +92,19 @@ def add_entry():
 @app.route('/export')
 def export_data():
     data = load_data()
-    temp_data = []
-    for entry in data:
-        temp_entry = entry.copy()
-        temp_entry.pop('mpg', None)  # Remove mpg from export
-        temp_entry.pop('predicted_mpg', None)  # Remove predicted_mpg from export
-        temp_data.append(temp_entry)
-
     with open('data.csv', 'w', newline='') as csvfile:
         fieldnames = ['date', 'odometer', 'fuel_price', 'fuel', 'total_fuel_price']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()
-        for entry in temp_data:
-            writer.writerow(entry)
+        for entry in data:
+            writer.writerow({
+                'date': entry['date'],
+                'odometer': entry['odometer'],
+                'fuel_price': entry['fuel_price'],
+                'fuel': entry['fuel'],
+                'total_fuel_price': entry['total_fuel_price']
+            })
 
     return send_file('data.csv', as_attachment=True)
 

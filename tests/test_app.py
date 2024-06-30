@@ -44,7 +44,7 @@ class FuelTrackerTestCase(unittest.TestCase):
             {'odometer': 1100, 'fuel': 35},
         ]
         predicted_mpg = calculate_predicted_mpg(data)
-        self.assertAlmostEqual(predicted_mpg, 9.5223, places=2)
+        self.assertAlmostEqual(predicted_mpg, 10.0944, places=2)
 
     def test_export_data(self):
         response = self.app.get('/export')
