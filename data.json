@@ -29,5 +29,25 @@
         "mpg": 0.0,
         "total_fuel": 135.11,
         "predicted_mpg": 20.595280382252355
+    },
+    {
+        "date": "2024-06-30 20:20:34",
+        "odometer": 12345.0,
+        "fuel_price": 1.45,
+        "fuel": 34.0,
+        "total_fuel_price": 49.3,
+        "mpg": 1263.103094151671,
+        "total_fuel": 169.11,
+        "predicted_mpg": 313.39584642162185
+    },
+    {
+        "date": "2024-06-18T17:00",
+        "odometer": 13456.0,
+        "fuel_price": 13.56,
+        "fuel": 23.0,
+        "total_fuel_price": 311.88,
+        "mpg": 182.85188372002693,
+        "total_fuel": 192.11,
+        "predicted_mpg": 295.4468319420865
     }
 ]
