@@ -92,12 +92,19 @@ def add_entry():
 @app.route('/export')
 def export_data():
     data = load_data()
+    temp_data = []
+    for entry in data:
+        temp_entry = entry.copy()
+        temp_entry.pop('mpg', None)  # Remove mpg from export
+        temp_entry.pop('predicted_mpg', None)  # Remove predicted_mpg from export
+        temp_data.append(temp_entry)
+
     with open('data.csv', 'w', newline='') as csvfile:
-        fieldnames = ['date', 'odometer', 'fuel_price', 'fuel', 'total_fuel_price', 'mpg', 'total_fuel', 'predicted_mpg']
+        fieldnames = ['date', 'odometer', 'fuel_price', 'fuel', 'total_fuel_price']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()
-        for entry in data:
+        for entry in temp_data:
             writer.writerow(entry)
 
     return send_file('data.csv', as_attachment=True)
