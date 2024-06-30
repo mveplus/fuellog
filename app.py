@@ -47,7 +47,8 @@ def calculate_predicted_mpg(data):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    current_datetime = datetime.now().strftime('%Y-%m-%dT%H:%M')
+    return render_template('index.html', current_datetime=current_datetime)
 
 
 @app.route('/add', methods=['POST'])
@@ -56,6 +57,8 @@ def add_entry():
     date = request.form.get('date')
     if not date:
         date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    else:
+        date = datetime.strptime(date, '%Y-%m-%dT%H:%M').strftime('%Y-%m-%d %H:%M:%S')
     
     new_entry = {
         'date': date,

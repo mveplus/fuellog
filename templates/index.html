@@ -11,7 +11,7 @@
         <h1>Fuel Tracker</h1>
         <form id="fuelForm">
             <label for="date">Date (optional):</label>
-            <input type="datetime-local" id="date" name="date">
+            <input type="datetime-local" id="date" name="date" value="{{ current_datetime }}">
             
             <label for="odometer">Odometer Reading:</label>
             <input type="number" id="odometer" name="odometer" required>
