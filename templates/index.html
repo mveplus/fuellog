@@ -1,4 +1,4 @@
-i<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -41,4 +41,15 @@ i<!DOCTYPE html>
             .then(response => response.json())
             .then(data => {
                 const entryDiv = document.createElement('div');
-                entryDiv.textContent = `Date: ${data.date}, Odometer: ${data.odometer}, Fuel Price: ${data.fuel_price.toFixed(3)}, Fuel: ${data.fuel}, Total Fuel Price: ${(data.total_fuel_price).toFixed(3)}, Predicted MPG: 
+                entryDiv.textContent = `Date: ${data.date}, Odometer: ${data.odometer}, Fuel Price: ${data.fuel_price.toFixed(3)}, Fuel: ${data.fuel}, Total Fuel Price: ${(data.total_fuel_price).toFixed(3)}, Predicted MPG: ${data.predicted_mpg.toFixed(2)}`;
+                document.getElementById('entries').appendChild(entryDiv);
+                this.reset();
+            });
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            window.location.href = '/export';
+        });
+    </script>
+</body>
+</html>

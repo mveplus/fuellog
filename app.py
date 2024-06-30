@@ -64,8 +64,8 @@ def add_entry():
     if '.' in fuel_price:
         fuel_price = float(fuel_price)
     else:
-        fuel_price = int(fuel_price) / 100
-    
+        fuel_price = int(fuel_price) / 1000  # Convert to decimal
+
     new_entry = {
         'date': date,
         'odometer': float(request.form['odometer']),
