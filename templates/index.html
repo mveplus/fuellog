@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+i<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,7 +17,7 @@
             <input type="number" id="odometer" name="odometer" required>
             
             <label for="fuel_price">Fuel Price:</label>
-            <input type="number" step="0.01" id="fuel_price" name="fuel_price" required>
+            <input type="number" step="0.001" id="fuel_price" name="fuel_price" required>
             
             <label for="fuel">Fuel (Liters):</label>
             <input type="number" step="0.01" id="fuel" name="fuel" required>
@@ -41,15 +41,4 @@
             .then(response => response.json())
             .then(data => {
                 const entryDiv = document.createElement('div');
-                entryDiv.textContent = `Date: ${data.date}, Odometer: ${data.odometer}, Fuel Price: ${data.fuel_price}, Fuel: ${data.fuel}, Total Fuel Price: ${data.total_fuel_price}, MPG: ${data.mpg}, Total Fuel: ${data.total_fuel}, Predicted MPG: ${data.predicted_mpg}`;
-                document.getElementById('entries').appendChild(entryDiv);
-                this.reset();
-            });
-        });
-
-        document.getElementById('exportBtn').addEventListener('click', function() {
-            window.location.href = '/export';
-        });
-    </script>
-</body>
-</html>
+                entryDiv.textContent = `Date: ${data.date}, Odometer: ${data.odometer}, Fuel Price: ${data.fuel_price.toFixed(3)}, Fuel: ${data.fuel}, Total Fuel Price: ${(data.total_fuel_price).toFixed(3)}, Predicted MPG: 

@@ -60,12 +60,18 @@ def add_entry():
     else:
         date = datetime.strptime(date, '%Y-%m-%dT%H:%M').strftime('%Y-%m-%d %H:%M:%S')
     
+    fuel_price = request.form['fuel_price']
+    if '.' in fuel_price:
+        fuel_price = float(fuel_price)
+    else:
+        fuel_price = int(fuel_price) / 100
+    
     new_entry = {
         'date': date,
         'odometer': float(request.form['odometer']),
-        'fuel_price': float(request.form['fuel_price']),
+        'fuel_price': fuel_price,
         'fuel': float(request.form['fuel']),
-        'total_fuel_price': float(request.form['fuel_price']) * float(request.form['fuel'])
+        'total_fuel_price': fuel_price * float(request.form['fuel'])
     }
 
     if data:
