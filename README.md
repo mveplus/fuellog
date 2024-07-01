@@ -47,3 +47,8 @@ Fuel Used (gallons)=40×0.264172=10.56688Fuel Used (gallons)=40×0.264172=10.566
 MPG=10010.56688≈9.4635MPG=10.56688100​≈9.4635
 
 The value 9.4635 is accurate, so we need to update the test case to match this calculation. Also, to fix the ResourceWarning, we'll ensure files are properly closed.
+
+
+The main landing page will display both the input form and the table containing the fuel data. This table will be populated with data from the JSON file, and new entries can be added using the form. The table will update and display the new data after a form submission.
+
+The application now supports editing and deleting entries, confirms deletion, backs up data before deletion or editing, and allows importing and exporting data to/from CSV. Additionally, it includes a restore button to revert to the last backup, and displays data in a responsive table with checkboxes for selection.

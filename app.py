@@ -2,10 +2,12 @@ from flask import Flask, request, jsonify, render_template, send_file
 import json
 import csv
 from datetime import datetime
+import shutil
 
 app = Flask(__name__)
 
 DATA_FILE = 'data.json'
+BACKUP_FILE = 'backup.json'
 
 
 def load_data():
@@ -16,9 +18,19 @@ def load_data():
         return []
 
 
-def save_data(data):
+def save_data(data, backup=True):
+    if backup:
+        shutil.copyfile(DATA_FILE, BACKUP_FILE)
     with open(DATA_FILE, 'w') as file:
         json.dump(data, file, indent=4)
+
+
+def load_backup():
+    try:
+        with open(BACKUP_FILE, 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
 
 
 def calculate_mpg(last_entry, new_entry):
@@ -90,11 +102,14 @@ def add_entry():
     return jsonify(new_entry)
 
 
-@app.route('/delete/<int:index>', methods=['DELETE'])
-def delete_entry(index):
+@app.route('/delete', methods=['POST'])
+def delete_entries():
     data = load_data()
-    if 0 <= index < len(data):
-        del data[index]
+    indices = request.json.get('indices', [])
+    if indices:
+        for index in sorted(indices, reverse=True):
+            if 0 <= index < len(data):
+                del data[index]
         save_data(data)
         return jsonify({'success': True})
     return jsonify({'success': False}), 404
@@ -159,6 +174,44 @@ def export_data():
             })
 
     return send_file('data.csv', as_attachment=True)
+
+
+@app.route('/import', methods=['POST'])
+def import_data():
+    file = request.files['file']
+    data = load_data()
+    with open(file.filename, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            entry = {
+                'date': row['date'],
+                'odometer': float(row['odometer']),
+                'fuel_price': float(row['fuel_price']),
+                'fuel': float(row['fuel']),
+                'total_fuel_price': float(row['total_fuel_price'])
+            }
+            if data:
+                last_entry = data[-1]
+                entry['mpg'] = calculate_mpg(last_entry, entry)
+            else:
+                entry['mpg'] = 0
+            data.append(entry)
+
+    total_fuel = calculate_total_fuel(data)
+    predicted_mpg = calculate_predicted_mpg(data)
+    for entry in data:
+        entry['total_fuel'] = total_fuel
+        entry['predicted_mpg'] = predicted_mpg
+
+    save_data(data)
+    return jsonify({'success': True})
+
+
+@app.route('/restore')
+def restore_data():
+    backup_data = load_backup()
+    save_data(backup_data, backup=False)
+    return jsonify({'success': True, 'data': backup_data})
 
 
 if __name__ == '__main__':
