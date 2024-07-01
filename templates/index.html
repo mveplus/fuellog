@@ -4,52 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuel Tracker</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        table {
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            text-align: center;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Fuel Tracker</h1>
-        <form id="fuelForm">
-            <label for="date">Date (optional):</label>
-            <input type="datetime-local" id="date" name="date" value="{{ current_datetime }}">
-            
-            <label for="odometer">Odometer Reading:</label>
-            <input type="number" id="odometer" name="odometer" required>
-            
-            <label for="fuel_price">Fuel Price:</label>
-            <input type="number" step="0.001" id="fuel_price" name="fuel_price" required>
-            
-            <label for="fuel">Fuel (Liters):</label>
-            <input type="number" step="0.01" id="fuel" name="fuel" required>
-            
-            <button type="submit">Add Entry</button>
-        </form>
+        <h2 class="mt-4">Fuel Tracker</h2>
         
-        <button id="exportBtn">Export Data</button>
+        <form id="fuel-form" class="mb-4">
+            <div class="form-group">
+                <label for="date">Date and Time</label>
+                <input type="datetime-local" class="form-control" id="date" name="date" value="{{ current_datetime }}">
+            </div>
+            <div class="form-group">
+                <label for="odometer">Odometer Reading</label>
+                <input type="number" class="form-control" id="odometer" name="odometer" required>
+            </div>
+            <div class="form-group">
+                <label for="fuel_price">Fuel Price</label>
+                <input type="number" step="0.001" class="form-control" id="fuel_price" name="fuel_price" required>
+            </div>
+            <div class="form-group">
+                <label for="fuel">Fuel (Liters)</label>
+                <input type="number" class="form-control" id="fuel" name="fuel" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Entry</button>
+        </form>
 
-        <div id="entries"></div>
+        <h2 class="mt-4">Fuel Consumption Data</h2>
+        <table class="table table-bordered table-responsive-sm">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Odometer</th>
+                    <th>Fuel Price</th>
+                    <th>Fuel (Liters)</th>
+                    <th>Total Fuel Price</th>
+                    <th>MPG</th>
+                    <th>Total Fuel</th>
+                    <th>Predicted MPG</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                <tr>
+                    <td>{{ entry.date }}</td>
+                    <td>{{ entry.odometer }}</td>
+                    <td>{{ entry.fuel_price }}</td>
+                    <td>{{ entry.fuel }}</td>
+                    <td>{{ entry.total_fuel_price }}</td>
+                    <td>{{ entry.mpg }}</td>
+                    <td>{{ entry.total_fuel }}</td>
+                    <td>{{ entry.predicted_mpg }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        document.getElementById('fuelForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
+        document.getElementById('fuel-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            var formData = new FormData(this);
             fetch('/add', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
-                const entryDiv = document.createElement('div');
-                entryDiv.textContent = `Date: ${data.date}, Odometer: ${data.odometer}, Fuel Price: ${data.fuel_price.toFixed(3)}, Fuel: ${data.fuel}, Total Fuel Price: ${(data.total_fuel_price).toFixed(3)}, Predicted MPG: ${data.predicted_mpg.toFixed(2)}`;
-                document.getElementById('entries').appendChild(entryDiv);
-                this.reset();
-            });
-        });
-
-        document.getElementById('exportBtn').addEventListener('click', function() {
-            window.location.href = '/export';
+                // Reload the page to see the new entry
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
         });
     </script>
 </body>
 </html>
+
