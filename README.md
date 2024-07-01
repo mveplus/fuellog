@@ -8,7 +8,7 @@ Steps to Create the Web App
     Implement auto-save for the JSON database: Save data automatically to disk.
     Write unit tests: Ensure each function is tested.
 
-Project Structure
+Project is alfa state.
 
 Here's a simple project structure:
 
