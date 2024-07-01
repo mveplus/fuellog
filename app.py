@@ -90,6 +90,57 @@ def add_entry():
     return jsonify(new_entry)
 
 
+@app.route('/delete/<int:index>', methods=['DELETE'])
+def delete_entry(index):
+    data = load_data()
+    if 0 <= index < len(data):
+        del data[index]
+        save_data(data)
+        return jsonify({'success': True})
+    return jsonify({'success': False}), 404
+
+
+@app.route('/edit/<int:index>', methods=['POST'])
+def edit_entry(index):
+    data = load_data()
+    if 0 <= index < len(data):
+        entry = data[index]
+        date = request.form.get('date')
+        if not date:
+            date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            date = datetime.strptime(date, '%Y-%m-%dT%H:%M').strftime('%Y-%m-%d %H:%M:%S')
+
+        fuel_price = request.form['fuel_price']
+        if '.' in fuel_price:
+            fuel_price = float(fuel_price)
+        else:
+            fuel_price = int(fuel_price) / 1000  # Convert to decimal
+
+        entry.update({
+            'date': date,
+            'odometer': float(request.form['odometer']),
+            'fuel_price': fuel_price,
+            'fuel': float(request.form['fuel']),
+            'total_fuel_price': fuel_price * float(request.form['fuel'])
+        })
+
+        if index > 0:
+            last_entry = data[index - 1]
+            entry['mpg'] = calculate_mpg(last_entry, entry)
+        else:
+            entry['mpg'] = 0
+
+        data[index] = entry
+        total_fuel = calculate_total_fuel(data)
+        predicted_mpg = calculate_predicted_mpg(data)
+        entry['total_fuel'] = total_fuel
+        entry['predicted_mpg'] = predicted_mpg
+        save_data(data)
+        return jsonify({'success': True})
+    return jsonify({'success': False}), 404
+
+
 @app.route('/export')
 def export_data():
     data = load_data()
