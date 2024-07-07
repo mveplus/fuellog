@@ -1,251 +1,174 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fuel Tracker</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        table {
-            width: 100%;
-            margin: 20px 0;
-        }
-        th, td {
-            text-align: center;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container">
-        <h2 class="mt-4">Fuel Tracker</h2>
-        
-        <form id="fuel-form" class="mb-4">
-            <div class="form-group">
-                <label for="date">Date and Time</label>
-                <input type="datetime-local" class="form-control" id="date" name="date" value="{{ current_datetime }}">
-            </div>
-            <div class="form-group">
-                <label for="odometer">Odometer Reading</label>
-                <input type="number" class="form-control" id="odometer" name="odometer" required>
-            </div>
-            <div class="form-group">
-                <label for="fuel_price">Fuel Price</label>
-                <input type="number" step="0.001" class="form-control" id="fuel_price" name="fuel_price" required>
-            </div>
-            <div class="form-group">
-                <label for="fuel">Fuel (Liters)</label>
-                <input type="number" step="0.01" class="form-control" id="fuel" name="fuel" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Add Entry</button>
-            <button type="button" class="btn btn-secondary" onclick="exportData()">Export to CSV</button>
-            <input type="file" id="fileInput" class="d-none" accept=".csv" onchange="importData(event)">
-            <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Import from CSV</button>
-            <button type="button" class="btn btn-danger" id="delete-button" disabled onclick="confirmDelete()">Delete Selected</button>
-            <button type="button" class="btn btn-warning" onclick="restoreData()">Restore Backup</button>
-        </form>
-        
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Select</th>
-                        <th>Date and Time</th>
-                        <th>Odometer Reading</th>
-                        <th>Fuel Price</th>
-                        <th>Fuel (Liters)</th>
-                        <th>Total Fuel Price</th>
-                        <th>MPG</th>
-                        <th>Predicted MPG</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for entry in entries %}
-                    <tr>
-                        <td><input type="checkbox" class="select-entry" data-index="{{ loop.index0 }}"></td>
-                        <td>{{ entry.date }}</td>
-                        <td>{{ entry.odometer }}</td>
-                        <td>{{ entry.fuel_price }}</td>
-                        <td>{{ entry.fuel }}</td>
-                        <td>{{ entry.total_fuel_price }}</td>
-                        <td>{{ entry.mpg }}</td>
-                        <td>{{ entry.predicted_mpg }}</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm" onclick="editEntry({{ loop.index0 }})">Edit</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<div class="container">
+    <h1 class="mt-5">Fuel Tracker</h1>
+    <form id="fuel-form" class="mt-4">
+        <div class="form-group">
+            <label for="date">Date and Time</label>
+            <input type="datetime-local" class="form-control" id="date" name="date" value="{{ current_datetime }}">
         </div>
-
-        <!-- Edit Entry Modal -->
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit Entry</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="edit-form">
-                            <div class="form-group">
-                                <label for="edit-date">Date and Time</label>
-                                <input type="datetime-local" class="form-control" id="edit-date" name="date">
-                            </div>
-                            <div class="form-group">
-                                <label for="edit-odometer">Odometer Reading</label>
-                                <input type="number" class="form-control" id="edit-odometer" name="odometer" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="edit-fuel_price">Fuel Price</label>
-                                <input type="number" step="0.001" class="form-control" id="edit-fuel_price" name="fuel_price" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="edit-fuel">Fuel (Liters)</label>
-                                <input type="number" step="0.01" class="form-control" id="edit-fuel" name="fuel" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <div class="form-group">
+            <label for="odometer">Odometer Reading</label>
+            <input type="number" step="0.1" class="form-control" id="odometer" name="odometer" required>
         </div>
-
-    </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        document.getElementById('fuel-form').addEventListener('submit', function(event) {
+        <div class="form-group">
+            <label for="fuel_price">Fuel Price</label>
+            <input type="number" step="0.001" class="form-control" id="fuel_price" name="fuel_price" required>
+        </div>
+        <div class="form-group">
+            <label for="fuel">Fuel (Liters)</label>
+            <input type="number" step="0.1" class="form-control" id="fuel" name="fuel" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Entry</button>
+    </form>
+    <h2 class="mt-5">Fuel Log</h2>
+    <button id="delete-selected" class="btn btn-danger mt-3" disabled>Delete Selected</button>
+    <button id="restore-data" class="btn btn-warning mt-3">Restore Data</button>
+    <button id="export-data" class="btn btn-success mt-3">Export Data</button>
+    <form id="import-form" class="mt-3" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="import-file">Import Data</label>
+            <input type="file" class="form-control-file" id="import-file" name="file" accept=".csv">
+        </div>
+        <button type="submit" class="btn btn-info">Import Data</button>
+    </form>
+    <table class="table mt-4">
+        <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Date</th>
+            <th scope="col">Odometer</th>
+            <th scope="col">Fuel Price</th>
+            <th scope="col">Fuel (Liters)</th>
+            <th scope="col">Total Fuel Price</th>
+            <th scope="col">MPG</th>
+            <th scope="col">Total Fuel</th>
+            <th scope="col">Predicted MPG</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for entry in entries %}
+        <tr>
+            <td><input type="checkbox" class="select-entry" data-index="{{ loop.index0 }}"></td>
+            <td>{{ entry.date }}</td>
+            <td>{{ entry.odometer }}</td>
+            <td>{{ entry.fuel_price }}</td>
+            <td>{{ entry.fuel }}</td>
+            <td>{{ entry.total_fuel_price }}</td>
+            <td>{{ entry.mpg }}</td>
+            <td>{{ entry.total_fuel }}</td>
+            <td>{{ entry.predicted_mpg }}</td>
+            <td>
+                <button class="btn btn-sm btn-primary edit-entry" data-index="{{ loop.index0 }}">Edit</button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#fuel-form').on('submit', function(event) {
             event.preventDefault();
-            
-            var formData = new FormData(this);
-            fetch('/add', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Reload the page to see the new entry
-                location.reload();
-            })
-            .catch(error => console.error('Error:', error));
-        });
-
-        document.querySelectorAll('.select-entry').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                var selected = document.querySelectorAll('.select-entry:checked').length > 0;
-                document.getElementById('delete-button').disabled = !selected;
-            });
-        });
-
-        function confirmDelete() {
-            if (confirm("Are you sure you want to delete the selected entries?")) {
-                deleteSelectedEntries();
-            }
-        }
-
-        function deleteSelectedEntries() {
-            var selectedEntries = [];
-            document.querySelectorAll('.select-entry:checked').forEach(checkbox => {
-                selectedEntries.push(parseInt(checkbox.getAttribute('data-index')));
-            });
-
-            fetch('/delete', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ indices: selectedEntries })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
+            $.ajax({
+                type: 'POST',
+                url: '/add',
+                data: $(this).serialize(),
+                success: function(response) {
                     location.reload();
-                } else {
-                    alert('Failed to delete entries.');
                 }
-            })
-            .catch(error => console.error('Error:', error));
-        }
+            });
+        });
 
-        function editEntry(index) {
-            // Load the current entry data into the modal form
-            var entry = {{ entries|tojson }};
-            var currentEntry = entry[index];
+        $('.edit-entry').on('click', function() {
+            var index = $(this).data('index');
+            // Populate the form with the entry data for editing
+            var entry = $('tr').eq(index + 1).find('td');
+            $('#date').val(entry.eq(1).text());
+            $('#odometer').val(entry.eq(2).text());
+            $('#fuel_price').val(entry.eq(3).text());
+            $('#fuel').val(entry.eq(4).text());
+            // Add an update button to the form
+            $('#fuel-form').append('<button type="button" class="btn btn-warning update-entry" data-index="' + index + '">Update Entry</button>');
+            $('.btn-primary').prop('disabled', true);
+        });
 
-            document.getElementById('edit-date').value = currentEntry.date.replace(' ', 'T');
-            document.getElementById('edit-odometer').value = currentEntry.odometer;
-            document.getElementById('edit-fuel_price').value = currentEntry.fuel_price;
-            document.getElementById('edit-fuel').value = currentEntry.fuel;
+        $('#fuel-form').on('click', '.update-entry', function() {
+            var index = $(this).data('index');
+            $.ajax({
+                type: 'POST',
+                url: '/edit/' + index,
+                data: $('#fuel-form').serialize(),
+                success: function(response) {
+                    location.reload();
+                }
+            });
+        });
 
-            $('#editModal').modal('show');
+        $('.select-entry').on('change', function() {
+            var anyChecked = $('.select-entry:checked').length > 0;
+            $('#delete-selected').prop('disabled', !anyChecked);
+        });
 
-            document.getElementById('edit-form').onsubmit = function(event) {
-                event.preventDefault();
-                
-                var formData = new FormData(this);
-                fetch(`/edit/${index}`, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
+        $('#delete-selected').on('click', function() {
+            if (confirm('Are you sure you want to delete the selected entries?')) {
+                var indices = [];
+                $('.select-entry:checked').each(function() {
+                    indices.push($(this).data('index'));
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: '/delete',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ indices: indices }),
+                    success: function(response) {
                         location.reload();
-                    } else {
-                        alert('Failed to edit entry.');
                     }
-                })
-                .catch(error => console.error('Error:', error));
-            };
-        }
+                });
+            }
+        });
 
-        function exportData() {
+        $('#restore-data').on('click', function() {
+            if (confirm('Are you sure you want to restore the data? This will overwrite the current data.')) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/restore',
+                    success: function(response) {
+                        location.reload();
+                    }
+                });
+            }
+        });
+
+        $('#export-data').on('click', function() {
             window.location.href = '/export';
-        }
+        });
 
-        function importData(event) {
-            var file = event.target.files[0];
-            var formData = new FormData();
-            formData.append('file', file);
-
-            fetch('/import', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
+        $('#import-form').on('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                type: 'POST',
+                url: '/import',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
                     location.reload();
-                } else {
-                    alert('Failed to import data.');
                 }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-
-        function restoreData() {
-            fetch('/restore')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Data restored successfully.');
-                    location.reload();
-                } else {
-                    alert('Failed to restore data.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
+            });
+        });
+    });
+</script>
 </body>
 </html>
+

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5">Login</h1>
+    <div class="list-group mt-4">
+        <a href="{{ url_for('google.login') }}" class="list-group-item list-group-item-action">Login with Google</a>
+        <a href="{{ url_for('github.login') }}" class="list-group-item list-group-item-action">Login with GitHub</a>
+        <a href="{{ url_for('facebook.login') }}" class="list-group-item list-group-item-action">Login with Facebook</a>
+    </div>
+</div>
+</body>
+</html>
+

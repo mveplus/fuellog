@@ -1,2 +1,6 @@
 Flask==2.0.2
+Flask-Dance==3.3.0
+Authlib==1.0.0
+requests==2.26.0
+python-dotenv==0.19.1
 Werkzeug==2.0.2
