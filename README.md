@@ -12,16 +12,18 @@
 ## Here's a simple project structure:
 
 
-/fuel_tracker
-|-- app.py
-|-- static
-|   |-- styles.css
-|-- templates
-|   |-- index.html
-|-- data.json
-|-- tests
-|   |-- test_app.py
-|-- requirements.txt
+-fuel_tracker
+    - app.py
+    - static
+        - styles.css
+    - templates
+        - index.html
+    - data.json
+    - data.csv
+    - backup.json
+    - tests
+       - test_app.py
+    - requirements.txt
 
 
 ## Running the App and Tests
@@ -33,15 +35,17 @@
 
 This setup provides a simple, responsive web application for tracking car fuel consumption and price, calculating fuel economy in MPG, and exporting data to CSV. The application uses Flask for the backend, JSON for data storage, and basic HTML/CSS/JavaScript for the frontend.
 
-## MPG=Distance Traveled (miles)Fuel Used (gallons)MPG=Fuel Used (gallons from liters)Distance Traveled (miles)
-First, let's verify the formula and calculation used for MPG. The MPG is calculated as the distance traveled divided by the amount of fuel used in gallons. Here's the formula:
+## MPG
 
-Given:
+Distance Traveled (miles)Fuel Used (gallons)MPG=Fuel Used (gallons from liters)Distance Traveled (miles)
+The MPG is calculated as the distance traveled divided by the amount of fuel used in gallons. Here's the formula:
+```
     Odometer reading difference = 1000 - 900 = 100 miles
     Fuel used = 40 liters, which needs to be converted to gallons (1 liter ≈ 0.264172 gallons).
     Fuel Used (gallons)=40×0.264172=10.56688Fuel Used (gallons)=40×0.264172=10.56688
     MPG=10010.56688≈9.4635MPG=10.56688100≈9.4635
-The value 9.4635 is accurate, so we need to update the test case to match this calculation.
+```
+The value 9.4635 is accurate, updated the test case to match this calculation.
 
 ## Other 
 The main landing page displays both the input form and the table containing the fuel data. 
