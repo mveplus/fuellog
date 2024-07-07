@@ -51,3 +51,9 @@ The table will update and display the new data after a form submission.
 
 The application supports editing and deleting entries, confirms deletion, backs up data before deletion or editing, and allows importing and exporting data to/from CSV. 
 Additionally, it includes a restore button to revert to the last backup, and displays data in a responsive table with checkboxes for selection.
+
+# SSO testing
+
+This setup provides Single Sign-On (SSO) with Google, GitHub, Facebook accounts, ensuring that your web app is secured with OAuth2 authentication.
+
+
