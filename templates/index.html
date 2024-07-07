@@ -53,13 +53,13 @@
                 <thead>
                     <tr>
                         <th>Select</th>
-                        <th>Date and Time</th>
-                        <th>Odometer Reading</th>
-                        <th>Fuel Price</th>
-                        <th>Fuel (Liters)</th>
-                        <th>Total Fuel Price</th>
+                        <th>Date/Time</th>
+                        <th>Odometer M</th>
+                        <th>Unit L</th>
+                        <th>Fuel L</th>
+                        <th>Tank £ </th>
+                        <!-- <th>Total Fuel to date</th> -->
                         <th>MPG</th>
-                        <th>Predicted MPG</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -72,7 +72,7 @@
                         <td>{{ entry.fuel_price }}</td>
                         <td>{{ entry.fuel }}</td>
                         <td>{{ entry.total_fuel_price }}</td>
-                        <td>{{ entry.mpg }}</td>
+                        <!-- <td>{{ entry.total_fuel }}</td>  error in caclulations-->
                         <td>{{ entry.predicted_mpg }}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" onclick="editEntry({{ loop.index0 }})">Edit</button>
