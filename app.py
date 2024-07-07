@@ -84,18 +84,18 @@ def add_entry():
         'odometer': float(request.form['odometer']),
         'fuel_price': fuel_price,
         'fuel': float(request.form['fuel']),
-        'total_fuel_price': fuel_price * float(request.form['fuel'])
+        'total_fuel_price': round(fuel_price * float(request.form['fuel']),2)
     }
 
     if data:
         last_entry = data[-1]
-        new_entry['mpg'] = calculate_mpg(last_entry, new_entry)
+        new_entry['mpg'] = round(calculate_mpg(last_entry, new_entry),2)
     else:
         new_entry['mpg'] = 0
 
     data.append(new_entry)
     total_fuel = calculate_total_fuel(data)
-    predicted_mpg = calculate_predicted_mpg(data)
+    predicted_mpg = round(calculate_predicted_mpg(data),2)
     new_entry['total_fuel'] = total_fuel
     new_entry['predicted_mpg'] = predicted_mpg
     save_data(data)
@@ -137,18 +137,18 @@ def edit_entry(index):
             'odometer': float(request.form['odometer']),
             'fuel_price': fuel_price,
             'fuel': float(request.form['fuel']),
-            'total_fuel_price': fuel_price * float(request.form['fuel'])
+            'total_fuel_price': round(fuel_price * float(request.form['fuel']),2)
         })
 
         if index > 0:
             last_entry = data[index - 1]
-            entry['mpg'] = calculate_mpg(last_entry, entry)
+            entry['mpg'] = round(calculate_mpg(last_entry, entry),2)
         else:
             entry['mpg'] = 0
 
         data[index] = entry
         total_fuel = calculate_total_fuel(data)
-        predicted_mpg = calculate_predicted_mpg(data)
+        predicted_mpg = round(calculate_predicted_mpg(data),2)
         entry['total_fuel'] = total_fuel
         entry['predicted_mpg'] = predicted_mpg
         save_data(data)

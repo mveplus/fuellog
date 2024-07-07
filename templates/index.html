@@ -38,7 +38,7 @@
             </div>
             <div class="form-group">
                 <label for="fuel">Fuel (Liters)</label>
-                <input type="number" class="form-control" id="fuel" name="fuel" required>
+                <input type="number" step="0.01" class="form-control" id="fuel" name="fuel" required>
             </div>
             <button type="submit" class="btn btn-primary">Add Entry</button>
             <button type="button" class="btn btn-secondary" onclick="exportData()">Export to CSV</button>
@@ -109,7 +109,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="edit-fuel">Fuel (Liters)</label>
-                                <input type="number" class="form-control" id="edit-fuel" name="fuel" required>
+                                <input type="number" step="0.01" class="form-control" id="edit-fuel" name="fuel" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Save changes</button>
                         </form>
