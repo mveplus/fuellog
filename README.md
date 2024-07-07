@@ -11,19 +11,18 @@
 
 ## Here's a simple project structure:
 
-
--fuel_tracker
-    - app.py
-    - static
-        - styles.css
-    - templates
-        - index.html
-    - data.json
-    - data.csv
-    - backup.json
-    - tests
-       - test_app.py
-    - requirements.txt
+- fuel_tracker
+  - app.py
+  - static
+    - styles.css
+  - templates
+    - index.html
+  - data.json
+  - data.csv
+  - backup.json
+  - tests
+    - test_app.py
+  - requirements.txt
 
 
 ## Running the App and Tests
