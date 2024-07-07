@@ -3,11 +3,24 @@ import json
 import csv
 from datetime import datetime
 import shutil
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
 
+# Define data and backup file
 DATA_FILE = 'data.json'
 BACKUP_FILE = 'backup.json'
+
+# Define the upload directory (ensure it matches where files are stored)
+UPLOAD_FOLDER = './uploads'  # Update this path as per your setup
+ALLOWED_EXTENSIONS = {'csv'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def load_data():
@@ -179,33 +192,39 @@ def export_data():
 @app.route('/import', methods=['POST'])
 def import_data():
     file = request.files['file']
-    data = load_data()
-    with open(file.filename, newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            entry = {
-                'date': row['date'],
-                'odometer': float(row['odometer']),
-                'fuel_price': float(row['fuel_price']),
-                'fuel': float(row['fuel']),
-                'total_fuel_price': float(row['total_fuel_price'])
-            }
-            if data:
-                last_entry = data[-1]
-                entry['mpg'] = calculate_mpg(last_entry, entry)
-            else:
-                entry['mpg'] = 0
-            data.append(entry)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)  # Save the uploaded file to a secure location
+        
+        data = load_data()
+        with open(filepath, newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                entry = {
+                    'date': row['date'],
+                    'odometer': float(row['odometer']),
+                    'fuel_price': float(row['fuel_price']),
+                    'fuel': float(row['fuel']),
+                    'total_fuel_price': float(row['total_fuel_price'])
+                }
+                if data:
+                    last_entry = data[-1]
+                    entry['mpg'] = calculate_mpg(last_entry, entry)
+                else:
+                    entry['mpg'] = 0
+                data.append(entry)
 
-    total_fuel = calculate_total_fuel(data)
-    predicted_mpg = calculate_predicted_mpg(data)
-    for entry in data:
-        entry['total_fuel'] = total_fuel
-        entry['predicted_mpg'] = predicted_mpg
+        total_fuel = calculate_total_fuel(data)
+        predicted_mpg = calculate_predicted_mpg(data)
+        for entry in data:
+            entry['total_fuel'] = total_fuel
+            entry['predicted_mpg'] = predicted_mpg
 
-    save_data(data)
-    return jsonify({'success': True})
+        save_data(data)
+        return jsonify({'success': True})
 
+    return jsonify({'success': False, 'error': 'Invalid file format or no file provided'})
 
 @app.route('/restore')
 def restore_data():
