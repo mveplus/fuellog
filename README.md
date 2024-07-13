@@ -13,7 +13,7 @@
 7. Tests & Tunes: Some unit tests to keep things in check.
 8. Docker Delight: Option to run in Docker for ultimate container coolness.
 
-Features Galore:
+### Features Galore:
 
 Edit and delete entries with style.
 Confirm deletions (because we're cautious like that).
@@ -22,21 +22,27 @@ Responsive table with checkboxes for easy selection.
 Export and import data to/from CSV.
 Main page shows the input form and your fuel data table in all its glory.
 
-Stay fueled up and on track with this awesome web app!
+### Stay fueled up and on track with this awesome web app!
 
 
 ## Here's a simple project structure:
 ```bash
-/fuel_tracker
-|-- app.py
-|-- static
-|   |-- styles.css
-|-- templates
-|   |-- index.html
-|-- data.json
-|-- tests
-|   |-- test_app.py
-|-- requirements.txt
+fuel_log_webapp/
+├── fuel_tracker/
+│   ├── __init__.py
+│   ├── app.py
+│   ├── templates/
+│   │   ├── index.html
+│   │   └── login.html
+│   ├── static/
+│   │   └── style.css
+│   └── data.json
+├── tests/
+│   └── test_app.py
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
 ```
 
 ## Running the App and Tests
@@ -80,31 +86,8 @@ docker build -t fuel_tracker_app .
  docker run -p 5000:5000 fuel_tracker_app
 ```
 
-Or with Docker Compose [ optional ]:
+## Or with Docker Compose [ __optional__ ]:
 
 ```bash
 docker-compose up --build
-```
-
-## Docker app structure:
-
-```bash
-
-fuel_log_webapp/
-├── fuel_tracker/
-│   ├── __init__.py
-│   ├── app.py
-│   ├── templates/
-│   │   ├── index.html
-│   │   └── login.html
-│   ├── static/
-│   │   └── style.css
-│   └── data.json
-├── tests/
-│   └── test_app.py
-├── Dockerfile
-├── docker-compose.yml
-├── requirements.txt
-└── README.md
-
 ```
