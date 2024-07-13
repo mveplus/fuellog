@@ -1,17 +1,29 @@
-# Simple Fuel tracker Web App
+# Fuel Tracker Web App: Keep Your Tank Full and Data Cool!
 
 > [!IMPORTANT]
 > The project state is alfa [unstable]!
 > Many things could change and there are a lot of moving parts ;)
 
-1. Basic Flask app: Flask will serve as the web framework in this webapp.
-2. A JSON database: Store the data in a JSON file.
-3. Responsive web for desktop and mobile, with HTML/CSS/JavaScript.
-4. Basic functions to calculate fuel totatl per input and fuel economy MPG.
-5. Functionality to export/import data to/from CSV.
-6. Creates a single backup of the last modification. 
-7. Some unit tests for functions.
-8. Added docker option
+1. Flasky Goodness: Our backend’s running on Flask, the web framework for cool cats.
+2. JSON Jive: Store your fuel data in a slick JSON file.
+3. Responsive Vibes: Looks great on both your massive desktop and your tiny phone.
+4. MPG Magic: Calculate fuel economy and total fuel cost with ease.
+5. CSV Shuffle: Import/export your data like a pro.
+6. Backup Buddy: Automatic backup before any major moves.
+7. Tests & Tunes: Some unit tests to keep things in check.
+8. Docker Delight: Option to run in Docker for ultimate container coolness.
+
+Features Galore:
+
+    Edit and delete entries with style.
+    Confirm deletions (because we're cautious like that).
+    Restore data from the last backup with a click.
+    Responsive table with checkboxes for easy selection.
+    Export and import data to/from CSV.
+    Main page shows the input form and your fuel data table in all its glory.
+
+Stay fueled up and on track with this awesome web app!
+
 
 ## Here's a simple project structure:
 ```bash
@@ -29,12 +41,18 @@
 
 ## Running the App and Tests
 
-1. Install dependencies: pip install -r requirements.txt
-2. Run the Flask app: python app.py
-3. Run the unit tests: python -m unittest discover -s tests
+1. Install virtualenv (if not already installed): `pip install virtualenv`
+2. Create a Virtual Environment: 
+     ```bash
+     cd /path/to/your/project
+     virtualenv venv
+     ```
+3: Activate the Virtual Environment: `source venv/bin/activate` 
+4. Install dependencies: `pip install -r requirements.txt`
+5. Run the Flask app: `python /fuel_tracker/app.py`
+6. Run the unit tests: `python -m unittest discover -s tests`
 
-
-This setup provides a simple, responsive web application for tracking car fuel consumption and price, calculating fuel economy in MPG, and exporting data to CSV. The application uses Flask for the backend, JSON for data storage, and basic HTML/CSS/JavaScript for the frontend.
+Once you’re done working in the virtual environment, you can deactivate it: `deactivate`
 
 ## MPG
 
@@ -48,13 +66,7 @@ The MPG is calculated as the distance traveled divided by the amount of fuel use
 ```
 The value 9.4635 is accurate, updated the test case to match this calculation.
 
-## Other 
-The main landing page displays both the input form and the table containing the fuel data. 
-The table will be populated with data from the JSON file, and new entries can be added using the form.
-The table will update and display the new data after a form submission.
-
-The application supports editing and deleting entries, confirms deletion, backs up data before deletion or editing, and allows importing and exporting data to/from CSV. 
-Additionally, it includes a restore button to revert to the last backup, and displays data in a responsive table with checkboxes for selection.# Build and Run the Docker Container
+# Build and Run the Docker Container
 
 ## Build the Docker image:
 
