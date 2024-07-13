@@ -1,13 +1,17 @@
 # Simple Fuel tracker Web App
-## Project is alfa state.
 
-1. Basic Flask app: Flask will serve as the web framework.
+> [!IMPORTANT]
+> The project state is alfa [unstable]!
+> Many things could change and there are a lot of moving parts ;)
+
+1. Basic Flask app: Flask will serve as the web framework in this webapp.
 2. A JSON database: Store the data in a JSON file.
-3. Responsive web for desktop and mobile, with HTML/CSS/JavaScript:  
-4. Basic functions to calculate fuel economy to calculate MPG.
-5. Functionality to export data to CSV
-6. Auto-save for the JSON database: Save data automatically. 
-7. Some unit tests for functions. 
+3. Responsive web for desktop and mobile, with HTML/CSS/JavaScript.
+4. Basic functions to calculate fuel totatl per input and fuel economy MPG.
+5. Functionality to export/import data to/from CSV.
+6. Creates a single backup of the last modification. 
+7. Some unit tests for functions.
+8. Added docker option
 
 ## Here's a simple project structure:
 ```bash
@@ -64,7 +68,7 @@ docker build -t fuel_tracker_app .
  docker run -p 5000:5000 fuel_tracker_app
 ```
 
-Or with Docker Compose:
+Or with Docker Compose [ optional ]:
 
 ```bash
 docker-compose up --build
@@ -92,5 +96,3 @@ fuel_log_webapp/
 └── README.md
 
 ```
-
-
