@@ -1,26 +1,17 @@
+import os
 from flask import Flask, request, jsonify, render_template, send_file
 import json
 import csv
 from datetime import datetime
 import shutil
-from werkzeug.utils import secure_filename
-import os
 
 app = Flask(__name__)
 
-# Define data and backup file
-DATA_FILE = 'data.json'
-BACKUP_FILE = 'backup.json'
+# Set the base directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Define the upload directory (ensure it matches where files are stored)
-UPLOAD_FOLDER = './uploads'  # Update this path as per your setup
-ALLOWED_EXTENSIONS = {'csv'}
-
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+DATA_FILE = os.path.join(BASE_DIR, 'data.json')
+BACKUP_FILE = os.path.join(BASE_DIR, 'backup.json')
 
 
 def load_data():
@@ -97,18 +88,18 @@ def add_entry():
         'odometer': float(request.form['odometer']),
         'fuel_price': fuel_price,
         'fuel': float(request.form['fuel']),
-        'total_fuel_price': round(fuel_price * float(request.form['fuel']),2)
+        'total_fuel_price': round(fuel_price * float(request.form['fuel']), 2)
     }
 
     if data:
         last_entry = data[-1]
-        new_entry['mpg'] = round(calculate_mpg(last_entry, new_entry),2)
+        new_entry['mpg'] = round(calculate_mpg(last_entry, new_entry), 2)
     else:
         new_entry['mpg'] = 0
 
     data.append(new_entry)
     total_fuel = calculate_total_fuel(data)
-    predicted_mpg = round(calculate_predicted_mpg(data),2)
+    predicted_mpg = round(calculate_predicted_mpg(data), 2)
     new_entry['total_fuel'] = total_fuel
     new_entry['predicted_mpg'] = predicted_mpg
     save_data(data)
@@ -150,18 +141,18 @@ def edit_entry(index):
             'odometer': float(request.form['odometer']),
             'fuel_price': fuel_price,
             'fuel': float(request.form['fuel']),
-            'total_fuel_price': round(fuel_price * float(request.form['fuel']),2)
+            'total_fuel_price': round(fuel_price * float(request.form['fuel']), 2)
         })
 
         if index > 0:
             last_entry = data[index - 1]
-            entry['mpg'] = round(calculate_mpg(last_entry, entry),2)
+            entry['mpg'] = round(calculate_mpg(last_entry, entry), 2)
         else:
             entry['mpg'] = 0
 
         data[index] = entry
         total_fuel = calculate_total_fuel(data)
-        predicted_mpg = round(calculate_predicted_mpg(data),2)
+        predicted_mpg = round(calculate_predicted_mpg(data), 2)
         entry['total_fuel'] = total_fuel
         entry['predicted_mpg'] = predicted_mpg
         save_data(data)
@@ -192,11 +183,11 @@ def export_data():
 @app.route('/import', methods=['POST'])
 def import_data():
     file = request.files['file']
-    if file and allowed_file(file.filename):
+    if file:
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)  # Save the uploaded file to a secure location
-        
+
         data = load_data()
         with open(filepath, newline='') as csvfile:
             reader = csv.DictReader(csvfile)
@@ -225,6 +216,7 @@ def import_data():
         return jsonify({'success': True})
 
     return jsonify({'success': False, 'error': 'Invalid file format or no file provided'})
+
 
 @app.route('/restore')
 def restore_data():
