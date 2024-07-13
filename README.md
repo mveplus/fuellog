@@ -15,12 +15,12 @@
 
 Features Galore:
 
-    Edit and delete entries with style.
-    Confirm deletions (because we're cautious like that).
-    Restore data from the last backup with a click.
-    Responsive table with checkboxes for easy selection.
-    Export and import data to/from CSV.
-    Main page shows the input form and your fuel data table in all its glory.
+Edit and delete entries with style.
+Confirm deletions (because we're cautious like that).
+Restore data from the last backup with a click.
+Responsive table with checkboxes for easy selection.
+Export and import data to/from CSV.
+Main page shows the input form and your fuel data table in all its glory.
 
 Stay fueled up and on track with this awesome web app!
 
@@ -47,7 +47,7 @@ Stay fueled up and on track with this awesome web app!
      cd /path/to/your/project
      virtualenv venv
      ```
-3: Activate the Virtual Environment: `source venv/bin/activate` 
+3. Activate the Virtual Environment: `source venv/bin/activate` 
 4. Install dependencies: `pip install -r requirements.txt`
 5. Run the Flask app: `python /fuel_tracker/app.py`
 6. Run the unit tests: `python -m unittest discover -s tests`
